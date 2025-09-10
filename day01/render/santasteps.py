@@ -1,8 +1,8 @@
 import pygame
-import os
 
 # constants
 step_file = "day01/render/step.png"
+step_fill_file = "day01/render/step_fill.png"
 
 # general setup
 pygame.init()
@@ -12,8 +12,8 @@ pygame.display.set_caption("Santa vs. Stairs")
 running = True
 
 # surface
-surf = pygame.Surface((1,1))
 step = pygame.image.load(step_file)
+step_fill = pygame.image.load(step_fill_file)
 
 while running:
     # event loop
@@ -23,10 +23,13 @@ while running:
 
     # draw the game
     display_surface.fill(pygame.Color(49, 54, 110))
-    display_surface.blit(surf, (20,20))
-    display_surface.blit(step, (30,30))
-    display_surface.blit(step, (46,46))
-    pygame.display.flip()
 
+    # first step
+    curr_pos = (0, (WINDOW_HEIGHT/2)-16)
+    display_surface.blit(step, (curr_pos[0], curr_pos[1]))
+    while curr_pos[1] < WINDOW_HEIGHT:
+        curr_pos = (curr_pos[0], curr_pos[1]+16)
+        display_surface.blit(step_fill, (curr_pos[0], curr_pos[1]))
+    pygame.display.flip()
 
 pygame.QUIT()
