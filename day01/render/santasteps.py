@@ -1,5 +1,6 @@
 import pygame
 from os.path import join
+import pprint
 
 # constants
 step_file = join("day01", "render", "step.png")
@@ -16,6 +17,26 @@ running = True
 step = pygame.image.load(step_file).convert_alpha()
 step_fill = pygame.image.load(step_fill_file).convert()
 
+steps_on_screen = []
+start_pos = (0, (WINDOW_HEIGHT/2)-16)
+curr_pos = start_pos
+steps_on_screen.append(curr_pos)
+
+filename = "day01/input.txt"
+with open(filename) as opened_file:
+    line = opened_file.readline()
+
+print(len(line))
+floor = 0
+for i, char in enumerate(line, 1):
+    if char == "(":
+        floor += 1
+        steps_on_screen.append((steps_on_screen[i-1][0]+16, steps_on_screen[i-1][1]+16))
+    elif char == ")":
+        floor -= 1
+        steps_on_screen.append((steps_on_screen[i-1][0]+16, steps_on_screen[i-1][1]-16))
+    
+
 while running:
     # event loop
     for event in pygame.event.get():
@@ -31,6 +52,7 @@ while running:
     while curr_pos[1] < WINDOW_HEIGHT:
         curr_pos = (curr_pos[0], curr_pos[1]+16)
         display_surface.blit(step_fill, (curr_pos[0], curr_pos[1]))
+
     pygame.display.flip()
 
 pygame.quit()
